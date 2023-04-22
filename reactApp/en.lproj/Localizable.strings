@@ -1,0 +1,16 @@
+/* 
+  Localizable.strings
+  reactApp
+
+  Created by Mohamed Mataam on 22/04/2023.
+  
+*/
+
+//Auth
+"login"="Login";
+"register"="Register";
+"password"="Password";
+"auth_have_no_account"="lol";
+"auth_have_account"="lololo";
+
+"missing_email_password"="Invalid email or password";

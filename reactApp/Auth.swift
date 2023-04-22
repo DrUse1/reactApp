@@ -39,11 +39,11 @@ struct Auth : View{
             HStack{
                 VStack(spacing: 0){
                     if(page == "login"){
-                        Text("Se connecter")
+                        Text(LocalizedStringKey("login"))
                             .font(.system(size: 24, weight: .bold))
                             .foregroundColor(.black)
                     }else{
-                        Text("S'enregistrer")
+                        Text(LocalizedStringKey("register"))
                             .font(.system(size: 24, weight: .bold))
                             .foregroundColor(.black)
                     }
@@ -64,10 +64,10 @@ struct Auth : View{
                     
                     HStack{
                         if(showPassword){
-                            TextField("Password",
+                            TextField(LocalizedStringKey("password"),
                                       text: $password,
                                       prompt:
-                                        Text("Mot de passe")
+                                        Text(LocalizedStringKey("password"))
                                 .foregroundColor(.black)
                             )
                             .frame(height: 40)
@@ -77,10 +77,10 @@ struct Auth : View{
                                 handleSubmit()
                             }
                         }else{
-                            SecureField("Password",
+                            SecureField(LocalizedStringKey("password"),
                                         text: $password,
                                         prompt:
-                                            Text("Mot de passe")
+                                            Text(LocalizedStringKey("password"))
                                 .foregroundColor(.black)
                             )
                             .frame(height: 40)
@@ -102,7 +102,7 @@ struct Auth : View{
                     Rectangle().frame(width: 350, height:1).foregroundColor(.black)
                     
                     if(errorMessage != ""){
-                        Text(errorMessage)
+                        Text(LocalizedStringKey(errorMessage))
                     }
                     
                     Button(action: {
@@ -143,14 +143,14 @@ struct Auth : View{
                     }).padding(.vertical, 40)
                     
                     Text(page == "login"
-                         ? "Vous n'avez pas de compte ?"
-                         : "Vous avez déjà un compte ?")
+                         ? LocalizedStringKey("auth_have_no_account")
+                         : LocalizedStringKey("auth_have_account"))
                     .padding(.bottom)
                     .foregroundColor(.black)
                     
                     Text(page == "login"
-                         ? "S'enregistrer"
-                         : "Se conecter")
+                         ? LocalizedStringKey("register")
+                         : LocalizedStringKey("login"))
                     .underline()
                     .foregroundColor(.black)
                     .onTapGesture {
@@ -183,7 +183,7 @@ struct Auth : View{
             let errorMessage: Optional<String>
         }
         
-        let url: URL = URL(string: "https://b89d-2a01-cb1d-4d7-3f00-85db-7ec1-5532-9a22.ngrok-free.app/register")!
+        let url: URL = URL(string: "https://26f0-2a01-cb1d-4d7-3f00-85db-7ec1-5532-9a22.ngrok-free.app/register")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
