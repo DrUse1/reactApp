@@ -282,7 +282,6 @@ class CameraModel: ObservableObject{
     }
 }
 
-
 struct CameraPreview: UIViewRepresentable{
     @ObservedObject var camera: CameraModel
     
