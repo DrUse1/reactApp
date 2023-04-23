@@ -9,9 +9,10 @@ import SwiftUI
 
 struct ContentView: View {
     var inPreview = false
-    @State var isLogged = false
+    @State var isLogged = true
     
     var body: some View {
+        // Si user logged, alors affiche l'app, sinon la page de connection
         if(isLogged){
             MainView(inPreview: inPreview)
         }else{
@@ -22,6 +23,7 @@ struct ContentView: View {
     }
 }
 
+// Permet de preview
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView(inPreview: true)

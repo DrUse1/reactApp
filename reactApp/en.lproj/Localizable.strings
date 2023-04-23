@@ -10,7 +10,11 @@
 "login"="Login";
 "register"="Register";
 "password"="Password";
-"auth_have_no_account"="lol";
-"auth_have_account"="lololo";
+"auth_have_no_account"="You don't have an account ?";
+"auth_have_account"="You already have an account ?";
 
 "missing_email_password"="Invalid email or password";
+"auth_already_exists"="This account already exists";
+"auth_invalid_email"="Invalid email";
+"auth_weak_password_caracters"="Weak password, 6 caracters minimum";
+"unknown_error"="An error has occurred, try again later";

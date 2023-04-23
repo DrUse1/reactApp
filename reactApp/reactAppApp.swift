@@ -11,6 +11,7 @@ import SwiftUI
 struct reactAppApp: App {
     var body: some Scene {
         WindowGroup {
+            // Affiche le ContentView()
             ContentView()
         }
     }

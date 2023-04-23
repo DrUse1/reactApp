@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// Méthode permettant d'arrondir certains angles d'un rectangle
 struct RoundedCorner: Shape {
     var cornerRadius: CGFloat
     var corners: UIRectCorner
@@ -19,6 +20,7 @@ struct RoundedCorner: Shape {
     }
 }
 
+// Ajoute une méthode au Color pour inclure de l'hexadécimal
 extension Color {
     init(hex: UInt, alpha: Double = 1) {
         self.init(
