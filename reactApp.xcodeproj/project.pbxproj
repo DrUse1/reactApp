@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		17ABC04B29F5DE7E00B2897B /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17ABC04A29F5DE7E00B2897B /* Settings.swift */; };
 		D911956A29F4469100216806 /* reactAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D911956929F4469100216806 /* reactAppApp.swift */; };
 		D911956C29F4469100216806 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D911956B29F4469100216806 /* ContentView.swift */; };
 		D911956E29F4469200216806 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D911956D29F4469200216806 /* Assets.xcassets */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		17ABC04A29F5DE7E00B2897B /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		D911956629F4469100216806 /* reactApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = reactApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D911956929F4469100216806 /* reactAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reactAppApp.swift; sourceTree = "<group>"; };
 		D911956B29F4469100216806 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -66,6 +68,7 @@
 				D911957729F4480A00216806 /* MainView.swift */,
 				D911957929F4482400216806 /* Auth.swift */,
 				D911957B29F4483000216806 /* Utils.swift */,
+				17ABC04A29F5DE7E00B2897B /* Settings.swift */,
 				D991D83129F47C1B00E323B4 /* Localizable.strings */,
 			);
 			path = reactApp;
@@ -151,6 +154,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				17ABC04B29F5DE7E00B2897B /* Settings.swift in Sources */,
 				D911957C29F4483000216806 /* Utils.swift in Sources */,
 				D911956C29F4469100216806 /* ContentView.swift in Sources */,
 				D911957829F4480A00216806 /* MainView.swift in Sources */,

@@ -11,60 +11,83 @@ import AVFoundation
 struct MainView: View {
     var inPreview = false
     
+    // Initialiser les 3 tabs (et leurs icones)
     var tabs = ["bubble.left", "camera", "gearshape"]
     
     @GestureState private var scrollOffset : CGFloat = 0
     @State private var currentIndex : Int = 1
     
     var body: some View {
+        // La vue sera composé de la nav et du reste derrière
         ZStack{
+            // Le GeometryReader permet de connaitre la position/taille de l'élement qu'il englobe à l'écran
             GeometryReader{geo in
-                VStack {
-                    HStack(spacing: 0){
-                        ZStack{
-                            Rectangle().fill(.red)
-                            Text("View 1").font(.system(size: 64))
-                        }
-                        .zIndex(1)
-                        .id(1)
-                        
-                        GeometryReader{geoView in
-                            CameraView(inPreview: inPreview)
-                            .offset(x: -geoView.frame(in: .global).minX)
-                        }
-                        
-                        ZStack{
-                            Rectangle().fill(.green)
-                            Text("View 3").font(.system(size: 64))
-                        }
-                        .zIndex(1)
+                // Le HStack sera composé des 3 tabs : les uns à coté des autres
+                HStack(spacing: 0){
+                    // Premier tab // TODO
+                    ZStack{
+                        Rectangle().fill(.red)
+                        Text("View 1").font(.system(size: 64))
                     }
-                    .offset(x: max(min(0, (-geo.size.width * CGFloat(currentIndex)) + scrollOffset), -geo.size.width * CGFloat(tabs.count - 1)))
-                    .frame(width: geo.size.width*CGFloat(tabs.count))
-                    .gesture(DragGesture().updating($scrollOffset, body: { value, out, _ in
-                            out = value.translation.width
-                    }).onEnded({ val in
-                        let offsetX = max(-geo.size.width,min(val.predictedEndTranslation.width, geo.size.width))
-                        let progress = -offsetX / geo.size.width
-                        let roundProgress = progress.rounded()
-                        
-                        currentIndex = max(0, min(currentIndex + Int(roundProgress), tabs.count - 1))
-                    }))
+                    .zIndex(1)
+                    .id(1)
+                    
+                    // Deuxième tab : caméra, le geometryReader permet d'avoir l'effet "fixe" du tab, à chaque fois que la tab bouge, elle subit un offset opposé à ce mouvement et donc reste "fixe"
+                    GeometryReader{geoView in
+                        CameraView(inPreview: inPreview)
+                            .offset(x: -geoView.frame(in: .global).minX)
+                    }
+                    // le zIndex est de 0 pour que la cam reste derrière les autres tabs, les autres tabs ont un zIndex de 1
+                    .zIndex(0)
+                    
+                    // Troisième tab // TODO
+                    Settings()
+                    .zIndex(1)
                 }
-            }.animation(.easeOut, value: scrollOffset == 0)
+                // L'offset correspond au "defilement" entre les tabs et est déterminé par le geste de drag initialisé plus bas, le max et le min sert à ce qu'on ne puisse pas aller au dela du premier tab à gauche et au dela du dernier tab à droite
+                .offset(x: max(
+                    min(
+                        0,
+                        (-geo.size.width * CGFloat(currentIndex)) + scrollOffset),
+                    -geo.size.width * CGFloat(tabs.count - 1)))
+                // Les 3 tabs prendront au total la taille de l'écran * 3 (le nombre de tabs) pour que chaque tab prennent la taille de l'écran en entier
+                .frame(width: geo.size.width*CGFloat(tabs.count))
+                // Initialisation du geste de drag pour determiner l'offset et donc la navigation entre les tabs
+                .gesture(DragGesture().updating($scrollOffset, body: { value, out, _ in
+                    // Le out correspond à la variable scrollOffset et est égale à la distance parcouru pendant le drag pour avoir un effet de défilement
+                    out = value.translation.width
+                }).onEnded({ val in
+                    // Lorsque le drag est terminé, on voit où on est mais en utilisant le "predictedEndTranslation" qui permet de prédire où se serait arrêté le drag avec la vélocité actuel. On prend ça en compte pour que même si le offset dépasse pas la moité de l'écran, si le user fait un mouvement assez rapide que ça puisse quand même changer de tab (big brain)
+                    let offsetX = max(-geo.size.width,min(val.predictedEndTranslation.width, geo.size.width))
+                    // On calcule le progress pour voir si le défilement est allé assez loin pour changer de tab
+                    let progress = -offsetX / geo.size.width
+                    // On arrondi : si c'est 0.4 ça sera arrondi à 0 et on change pas de tab et inversement si c'est 0.6 ça sera arrondi à 1 et ça change de tab
+                    let roundProgress = progress.rounded()
+                    
+                    // On met à jour l'index du tab pour le changer
+                    currentIndex = max(0, min(currentIndex + Int(roundProgress), tabs.count - 1))
+                }))
+            }
+            // L'animation de changement de tab avec du easeOut pour que ça soit smooth
+            .animation(.easeOut, value: scrollOffset == 0)
             
+            // Le VStack sera composé d'un spacer() qui prend tout l'espace disponible en haut de l'écran pour mettre la navbar (ZStack) en bas de l'écran
             VStack{
                 Spacer()
+                
+                // La navbar
                 ZStack{
+                    // Le background de la navbar
                     Rectangle()
                         .fill(Color(hex: 0x1c1c1c))
                         .frame(height: 100)
                         .clipShape(RoundedCorner(cornerRadius: 30, corners: [.topLeft, .topRight]))
                     
+                    // Les 3 tabs de la navbar qui ont un spacer au debut, à la fin et entre chaque icones pour les répartir équitablement
                     HStack{
                         Spacer()
                         
-                        
+                        // Une forloop qui met un Bouton avec l'image qui correspond au tab pour chaques tabs
                         ForEach(
                             Array(
                                 tabs.enumerated()
@@ -90,6 +113,7 @@ struct MainView: View {
     }
 }
 
+// Commentaires //TODO
 struct CameraView: View {
     @State private var isRecording = false
     @State private var tookPicture = false
