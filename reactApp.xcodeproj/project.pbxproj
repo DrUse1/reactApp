@@ -18,6 +18,7 @@
 		D991D82F29F47C1B00E323B4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D991D83129F47C1B00E323B4 /* Localizable.strings */; };
 		D991D83429F5F68C00E323B4 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = D991D83329F5F68C00E323B4 /* Models.swift */; };
 		D991D83929F7132500E323B4 /* Conversations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D991D83829F7132500E323B4 /* Conversations.swift */; };
+		D9ED498829F72EFB005913CB /* Friends.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9ED498729F72EFB005913CB /* Friends.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +34,7 @@
 		D991D83029F47C1B00E323B4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D991D83329F5F68C00E323B4 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		D991D83829F7132500E323B4 /* Conversations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conversations.swift; sourceTree = "<group>"; };
+		D9ED498729F72EFB005913CB /* Friends.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Friends.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +78,7 @@
 				D911957B29F4483000216806 /* Utils.swift */,
 				17ABC04A29F5DE7E00B2897B /* Settings.swift */,
 				D991D83129F47C1B00E323B4 /* Localizable.strings */,
+				D9ED498729F72EFB005913CB /* Friends.swift */,
 			);
 			path = reactApp;
 			sourceTree = "<group>";
@@ -164,6 +167,7 @@
 				D911957C29F4483000216806 /* Utils.swift in Sources */,
 				D911956C29F4469100216806 /* ContentView.swift in Sources */,
 				D911957829F4480A00216806 /* MainView.swift in Sources */,
+				D9ED498829F72EFB005913CB /* Friends.swift in Sources */,
 				D991D83929F7132500E323B4 /* Conversations.swift in Sources */,
 				D911956A29F4469100216806 /* reactAppApp.swift in Sources */,
 				D911957A29F4482400216806 /* Auth.swift in Sources */,

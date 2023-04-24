@@ -189,7 +189,7 @@ struct Auth : View{
         if(page == "register"){
             register()
         }else{
-            //login() //TODO
+            login()
         }
     }
     
@@ -218,7 +218,46 @@ struct Auth : View{
                         errorMessage = result.errorMessage!
                     }else if(result.response == "ok"){
                         // Bien enregistrer
-                        print(result.userID!)
+                        print("registered", result.userID!)
+                        //isLoggedIn(true)
+                    }
+                }else{
+                    errorMessage = "unknown_erreur"
+                }
+            } catch let error {
+                errorMessage = "unknown_erreur"
+                print("error", error.localizedDescription)
+            }
+            isLoading = false
+        }.resume()
+    }
+    
+    func login(){
+        // URL du serveur
+        let url: URL = URL(string: "https://26f0-2a01-cb1d-4d7-3f00-85db-7ec1-5532-9a22.ngrok-free.app/login")!
+        // Initialisation de la requête http : methode, content-type, body
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        let parameters: [String: Any] = [
+            "email": email,
+            "password": password
+        ]
+        request.httpBody = try! JSONSerialization.data(withJSONObject: parameters)
+        
+        // Envoie la requête
+        URLSession.shared.dataTask(with: request){(data, res, err) in
+            do {
+                // Si la data n'est pas nul, on la traite
+                if let data = data {
+                    // On décode la data de la réponse au model définie (response, errorMessage...)
+                    let result = try JSONDecoder().decode(AuthResponseModel.self, from: data)
+                    if(result.response == "no"){
+                        // Si une erreur, alors l'afficher
+                        errorMessage = result.errorMessage!
+                    }else if(result.response == "ok"){
+                        // Bien enregistrer
+                        print("logged", result.userID!)
                         //isLoggedIn(true)
                     }
                 }else{

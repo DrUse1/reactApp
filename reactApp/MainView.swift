@@ -117,7 +117,6 @@ struct CameraView: View {
     var inPreview = false
     
     @StateObject var camera = CameraModel()
-    
     var body: some View{
         ZStack{
             if(!inPreview){
@@ -212,32 +211,42 @@ class CameraModel: ObservableObject{
     
     private var backCam = true
     
-    private var frontCamDevice: AVCaptureDevice?
-    private var backCamDevice: AVCaptureDevice?
+    private var frontDevices: [AVCaptureDevice] = []
+    private var backDevices: [AVCaptureDevice] = []
     
     func flipCam(){
         do {
-            print("try to flip")
-            var videoInput: AVCaptureDeviceInput?
             if(backCam){
-                if(frontCamDevice != nil){
-                    videoInput = try AVCaptureDeviceInput(device: frontCamDevice!)
+                if(!frontDevices.isEmpty){
+                    self.backCam.toggle()
+                    
+                    self.session.beginConfiguration()
+                    
+                    let frontDevice = frontDevices.first
+                    
+                    let input = try AVCaptureDeviceInput(device: frontDevice!)
+                    
+                    self.session.removeInput(self.session.inputs.first!)
+                    self.session.addInput(input)
+                    
+                    self.session.commitConfiguration()
                 }
             }else{
-                if(backCamDevice != nil){
-                    videoInput = try AVCaptureDeviceInput(device: backCamDevice!)
+                if(!backDevices.isEmpty){
+                    self.backCam.toggle()
+                    
+                    self.session.beginConfiguration()
+                    
+                    let backDevice = backDevices.first
+                    
+                    let input = try AVCaptureDeviceInput(device: backDevice!)
+                    
+                    self.session.removeInput(self.session.inputs.first!)
+                    self.session.addInput(input)
+                    
+                    self.session.commitConfiguration()
                 }
             }
-            self.backCam.toggle()
-            
-            self.session.beginConfiguration()
-            
-            if(videoInput != nil){
-                self.session.removeInput(self.session.inputs.first!)
-                self.session.addInput(videoInput!)
-            }
-            print("finished")
-            self.session.commitConfiguration()
         } catch {
             print("Erreur lors de la configuration de l'entrée vidéo : \(error.localizedDescription)")
         }
@@ -267,9 +276,6 @@ class CameraModel: ObservableObject{
     func setUp(){
         
         do{
-            print("begin setup")
-            self.session.beginConfiguration()
-            
             let deviceTypes: [AVCaptureDevice.DeviceType] = [
                 .builtInDualCamera,
                 .builtInDualWideCamera,
@@ -281,39 +287,52 @@ class CameraModel: ObservableObject{
                 .builtInWideAngleCamera
             ]
             
-            let frontDevices = AVCaptureDevice.DiscoverySession(
+            frontDevices = AVCaptureDevice.DiscoverySession(
                 deviceTypes: deviceTypes,
                 mediaType: .video,
                 position: .front)
                 .devices
             
-            let backDevices = AVCaptureDevice.DiscoverySession(
+            backDevices = AVCaptureDevice.DiscoverySession(
                 deviceTypes: deviceTypes,
                 mediaType: .video,
                 position: .back)
                 .devices
             
-            let frontCamera = frontDevices.isEmpty ? nil : frontDevices.first
-            //let backCamera = backDevices.isEmpty ? nil : backDevices.last
-            let backCamera = backDevices.isEmpty ? nil : AVCaptureDevice.default(for: .video)
-            
-            frontCamDevice = frontCamera
-            backCamDevice = backCamera
-            
-            if(backCamera != nil){
+            if(!backDevices.isEmpty){
+                self.session.beginConfiguration()
+                
+                let backCamera = backDevices.first
+                
                 let input = try AVCaptureDeviceInput(device: backCamera!)
                 
                 if self.session.canAddInput(input){
                     self.session.addInput(input)
                 }
+                
+                if self.session.canAddOutput(self.output){
+                    self.session.addOutput(self.output)
+                }
+                
+                self.session.commitConfiguration()
+                
+            }else if(!frontDevices.isEmpty){
+                self.session.beginConfiguration()
+                
+                let frontCamera = frontDevices.first
+                
+                let input = try AVCaptureDeviceInput(device: frontCamera!)
+                
+                if self.session.canAddInput(input){
+                    self.session.addInput(input)
+                }
+                
+                if self.session.canAddOutput(self.output){
+                    self.session.addOutput(self.output)
+                }
+                
+                self.session.commitConfiguration()
             }
-            
-            if self.session.canAddOutput(self.output){
-                self.session.addOutput(self.output)
-            }
-            
-            self.session.commitConfiguration()
-            print("commited configuration")
         }
         catch{
             print(error.localizedDescription)
