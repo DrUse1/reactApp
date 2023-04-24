@@ -39,7 +39,7 @@ struct MessageModel: Decodable {
 
 struct PhotoModel: Decodable {
     let id: String
-    let content: String // Actual Image, maybe binary or idk
+    let content: String // Link to S3 image, maybe ID or idk we'll see
     let sender: String // User ID
     let reactions: [String] // Photos ID
 }
