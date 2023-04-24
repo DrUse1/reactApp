@@ -14,7 +14,7 @@ struct AuthResponseModel: Decodable {
     let userID: Optional<String>
 }
 
-struct User: Decodable {
+struct UserModel: Decodable {
     let id: String
     let email: String
     let password: String
@@ -23,15 +23,23 @@ struct User: Decodable {
     let friends: [String] // Friends ID
 }
 
-struct Conversation: Decodable {
+struct ConversationModel: Decodable {
     let id: String
     let users: [String] // Users ID
     let messages: [String] // Messages ID
 }
 
-struct Message: Decodable {
+struct MessageModel: Decodable {
     let id: String
     let content: String
     let sender: String // User ID
     let date: Date
+    let read: [String] // Users ID
+}
+
+struct PhotoModel: Decodable {
+    let id: String
+    let content: String // Actual Image, maybe binary or idk
+    let sender: String // User ID
+    let reactions: [String] // Photos ID
 }

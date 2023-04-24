@@ -25,12 +25,8 @@ struct MainView: View {
                 // Le HStack sera composé des 3 tabs : les uns à coté des autres
                 HStack(spacing: 0){
                     // Premier tab // TODO
-                    ZStack{
-                        Rectangle().fill(.red)
-                        Text("View 1").font(.system(size: 64))
-                    }
+                    Conversations()
                     .zIndex(1)
-                    .id(1)
                     
                     // Deuxième tab : caméra, le geometryReader permet d'avoir l'effet "fixe" du tab, à chaque fois que la tab bouge, elle subit un offset opposé à ce mouvement et donc reste "fixe"
                     GeometryReader{geoView in
