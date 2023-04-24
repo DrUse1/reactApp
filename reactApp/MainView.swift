@@ -121,13 +121,16 @@ struct CameraView: View {
     var inPreview = false
     
     @StateObject var camera = CameraModel()
+    
     var body: some View{
         ZStack{
             if(!inPreview){
                 CameraPreview(camera: camera)
                     .ignoresSafeArea(.all, edges: .all)
                     .onTapGesture(count: 2) {
-                        camera.flipCam()
+                        DispatchQueue.global(qos: .default).async {
+                            camera.flipCam()
+                        }
                     }
             }else{
                 Color.black.ignoresSafeArea(.all, edges: .all)
@@ -195,7 +198,11 @@ struct CameraView: View {
             }
         }
         .onAppear(perform: {
-            camera.Check()
+            if(!inPreview){
+                DispatchQueue.global(qos: .default).async {
+                    camera.Check()
+                }
+            }
         })
     }
 }
@@ -214,19 +221,26 @@ class CameraModel: ObservableObject{
     
     func flipCam(){
         do {
+            print("try to flip")
             var videoInput: AVCaptureDeviceInput?
             if(backCam){
-                videoInput = try AVCaptureDeviceInput(device: frontCamDevice!)
+                if(frontCamDevice != nil){
+                    videoInput = try AVCaptureDeviceInput(device: frontCamDevice!)
+                }
             }else{
-                videoInput = try AVCaptureDeviceInput(device: backCamDevice!)
+                if(backCamDevice != nil){
+                    videoInput = try AVCaptureDeviceInput(device: backCamDevice!)
+                }
             }
             self.backCam.toggle()
             
             self.session.beginConfiguration()
-            self.session.removeInput(self.session.inputs.first!)
             
-            self.session.addInput(videoInput!)
-            
+            if(videoInput != nil){
+                self.session.removeInput(self.session.inputs.first!)
+                self.session.addInput(videoInput!)
+            }
+            print("finished")
             self.session.commitConfiguration()
         } catch {
             print("Erreur lors de la configuration de l'entrée vidéo : \(error.localizedDescription)")
@@ -236,14 +250,14 @@ class CameraModel: ObservableObject{
     func Check(){
         switch AVCaptureDevice.authorizationStatus(for: .video) {
         case .authorized:
-            setUp()
+                self.setUp()
             return
         case .notDetermined:
             AVCaptureDevice.requestAccess(for: .video) {
                 (status) in
                 
                 if(status){
-                    self.setUp()
+                        self.setUp()
                 }
             }
         case .denied:
@@ -257,6 +271,7 @@ class CameraModel: ObservableObject{
     func setUp(){
         
         do{
+            print("begin setup")
             self.session.beginConfiguration()
             
             let deviceTypes: [AVCaptureDevice.DeviceType] = [
@@ -282,16 +297,19 @@ class CameraModel: ObservableObject{
                 position: .back)
                 .devices
             
-            guard let frontCamera = frontDevices.first else { return }
-            //guard let backCamera = backDevices.last else { return }
-            guard let backCamera = AVCaptureDevice.default(for: .video) else { return }
+            let frontCamera = frontDevices.isEmpty ? nil : frontDevices.first
+            //let backCamera = backDevices.isEmpty ? nil : backDevices.last
+            let backCamera = backDevices.isEmpty ? nil : AVCaptureDevice.default(for: .video)
+            
             frontCamDevice = frontCamera
             backCamDevice = backCamera
             
-            let input = try AVCaptureDeviceInput(device: backCamera)
-            
-            if self.session.canAddInput(input){
-                self.session.addInput(input)
+            if(backCamera != nil){
+                let input = try AVCaptureDeviceInput(device: backCamera!)
+                
+                if self.session.canAddInput(input){
+                    self.session.addInput(input)
+                }
             }
             
             if self.session.canAddOutput(self.output){
@@ -299,6 +317,7 @@ class CameraModel: ObservableObject{
             }
             
             self.session.commitConfiguration()
+            print("commited configuration")
         }
         catch{
             print(error.localizedDescription)

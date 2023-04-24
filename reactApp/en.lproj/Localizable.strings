@@ -16,5 +16,7 @@
 "missing_email_password"="Invalid email or password";
 "auth_already_exists"="This account already exists";
 "auth_invalid_email"="Invalid email";
+"auth_invalid_password"="Invalid password";
+"auth_no_user"="This user doesn't exist"
 "auth_weak_password_caracters"="Weak password, 6 caracters minimum";
 "unknown_error"="An error has occurred, try again later";

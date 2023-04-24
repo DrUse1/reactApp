@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     var inPreview = false
-    @State var isLogged = true
+    @State var isLogged = false
     
     var body: some View {
         // Si user logged, alors affiche l'app, sinon la page de connection

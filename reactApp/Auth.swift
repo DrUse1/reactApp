@@ -56,6 +56,7 @@ struct Auth : View{
                           prompt:
                             Text("Email").foregroundColor(.black)
                 )
+                .textInputAutocapitalization(.never)
                 .frame(height: 40)
                 .padding(.top, 50)
                 .foregroundColor(.black)
@@ -193,12 +194,6 @@ struct Auth : View{
     }
     
     func register(){
-        // Model de la réponse du serveur
-        struct ResponseModel: Decodable{
-            let response: String
-            let errorMessage: Optional<String>
-        }
-        
         // URL du serveur
         let url: URL = URL(string: "https://26f0-2a01-cb1d-4d7-3f00-85db-7ec1-5532-9a22.ngrok-free.app/register")!
         // Initialisation de la requête http : methode, content-type, body
@@ -217,18 +212,17 @@ struct Auth : View{
                 // Si la data n'est pas nul, on la traite
                 if let data = data {
                     // On décode la data de la réponse au model définie (response, errorMessage...)
-                    let result = try JSONDecoder().decode(ResponseModel.self, from: data)
+                    let result = try JSONDecoder().decode(AuthResponseModel.self, from: data)
                     if(result.response == "no"){
                         // Si une erreur, alors l'afficher
                         errorMessage = result.errorMessage!
                     }else if(result.response == "ok"){
                         // Bien enregistrer
-                        print("ok nice")
+                        print(result.userID!)
                         //isLoggedIn(true)
                     }
                 }else{
                     errorMessage = "unknown_erreur"
-                    print("errordata")
                 }
             } catch let error {
                 errorMessage = "unknown_erreur"
