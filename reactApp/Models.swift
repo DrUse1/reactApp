@@ -20,7 +20,7 @@ struct UserModel: Decodable {
     let password: String
     let name: String
     let conversations: [String] // Conversations ID
-    let friends: [String] // Friends ID
+    let friends: [String] // Users ID
 }
 
 struct ConversationModel: Decodable {
